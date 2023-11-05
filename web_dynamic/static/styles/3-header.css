@@ -1,11 +1,28 @@
 header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background: white;
     height: 70px;
     width: 100%;
     border-bottom: 1px solid #CCCCCC;
 }
 header .logo {
-    background: url("../images/logo.png") no-repeat;
-    left: 20px;
-    height: 100%;
+    width: 142px;
+    height: 60px;
+    background: url("../images/logo.png") no-repeat center;
+    margin-left: 20px;
+}
+/* Specific class for background color */
+div.available {
+  background-color: #ff545f !important;
+}
+
+/* Common styles for both #api_status and .available */
+#api_status {
+  margin-right: 30px;
+  width: 40px;
+  height: 40px;
+  background-color: #cccccc;
+  border-radius: 50%;
 }
