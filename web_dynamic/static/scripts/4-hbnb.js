@@ -15,6 +15,7 @@ $(document).ready(function () {
     $('.amenities h4').text(newList.join(', '));
   });
 
+  // determine running state of APi
   $.get('http://0.0.0.0:5001/api/v1/status/', (data) => {
     if (data.status === 'OK') {
       $('div#api_status').addClass('available');
@@ -23,14 +24,16 @@ $(document).ready(function () {
     }
   });
 
-  $.ajax({
-    url: 'http://0.0.0.0:5001/api/v1/places_search/',
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify({}), // Send an empty JSON object
-    success: function (data) {
-      $.each(data, function (index, place) {
-        const template = `<article>
+  // create places based on data from api
+  function sendPostByAmenities (ids = {}) {
+    $.ajax({
+      url: 'http://0.0.0.0:5001/api/v1/places_search/',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(ids), // Send an empty request or list with IDs
+      success: function (data) {
+        $.each(data, function (index, place) {
+          const template = `<article>
                 <div class="title_box">
                     <h2>${place.name}</h2>
                     <div class="price_by_night">${place.price_by_night}</div>
@@ -48,8 +51,25 @@ $(document).ready(function () {
                 </div>
                 </article>`;
 
-        $('.places').append(template);
-      });
-    }
+          $('.places').append(template);
+        });
+      }
+    });
+  }
+
+  // Filter places by amenities
+  $('.filters button').click(() => {
+    const amenitiesIds = [];
+
+    $('input[type="checkbox"]:checked').each(function () {
+      amenitiesIds.push($(this).data('id'));
+    });
+
+    console.log(amenitiesIds);
+    sendPostByAmenities({amenities:amenitiesIds});
   });
+
 });
+
+
+
